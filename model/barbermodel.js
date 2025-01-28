@@ -19,6 +19,10 @@ const barberSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
+  price:{
+    type:Number,
+    required:true
+  }
 }, {
   timestamps: true, 
 });

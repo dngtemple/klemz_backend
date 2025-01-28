@@ -44,7 +44,7 @@ router.post('/appointments/create', async (req, res) => {
 
 router.get('/appointments/all', async (req, res) => {
   try {
-    const appointments = await appointmentSchema.find();
+    const appointments = await appointmentSchema.find().populate();
 
     if (appointments.length === 0) {
       return res.status(404).json({ message: 'No appointments found' });
