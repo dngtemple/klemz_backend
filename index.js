@@ -17,11 +17,13 @@ const db=process.env.DB_NAME
 const userRouter=require("./routes/user")
 const barberRouter=require("./routes/barber")
 const appointmentRouter=require("./routes/appointment")
+const haircutRouter=require("./routes/haircut")
 
 
 app.use("/user",userRouter);
 app.use("/barber",barberRouter);
 app.use("/appointment",appointmentRouter)
+app.use("/haircut",haircutRouter)
 
 
 
