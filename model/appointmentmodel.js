@@ -12,6 +12,11 @@ const appointmentSchema = new mongoose.Schema({
     ref: 'User', // References the User model
     required: true,
   },
+  haircutID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Haircut', // References the Haircut model
+    required: true,
+  },
   status: {
     type: Boolean,
     default: false, 
