@@ -8,6 +8,23 @@ const JWT_SECRET = 'your_secret_key';
 const UserSchema = require('../model/usermodel'); 
 const router = express.Router();
 
+const verifyToken = (req, res, next) => {
+  const token = req.header('Authorization');
+  
+  if (!token) {
+      return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
+
+  try {
+      const verified = jwt.verify(token.replace('Bearer ', ''), JWT_SECRET);
+      req.user = verified;
+      next();
+  } catch (error) {
+      res.status(400).json({ message: 'Invalid token.' });
+  }
+};
+
+
 router.get('/users', async (req, res) => {
   try {
     const users = await UserSchema.find(); 
@@ -19,19 +36,20 @@ router.get('/users', async (req, res) => {
 
 
 
-router.get('/users/:id', async (req, res) => {
-    try {
+router.get('/users/:id', verifyToken, async (req, res) => {
+  try {
       const user = await UserSchema.findById(req.params.id); // Find user by ID
-  
+
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+          return res.status(404).json({ message: 'User not found' });
       }
-  
+
       res.status(200).json(user); // Sends the user as a JSON response
-    } catch (error) {
+  } catch (error) {
       res.status(500).json({ message: 'Server error, unable to fetch user' });
-    }
-  });
+  }
+});
+
 
 
 
@@ -118,6 +136,34 @@ router.put('/users/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error, unable to update user', error: error.message });
   }
 });
+
+
+router.post('/forgot-password', async (req, res) => {
+  try {
+      const { email, newPassword } = req.body;
+      
+      if (!email || !newPassword) {
+          return res.status(400).json({ message: 'Email and new password are required' });
+      }
+
+      const user = await UserSchema.findOne({ email });
+      
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      
+      user.password = hashedPassword;
+      await user.save();
+
+      res.status(200).json({ message: 'Password has been updated successfully' });
+  } catch (error) {
+      res.status(500).json({ message: 'Server error during password reset' });
+  }
+});
+
+
 
 
   

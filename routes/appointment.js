@@ -2,7 +2,24 @@ const express = require('express');
 const router = express.Router();
 const appointmentSchema=require("../model/appointmentmodel")
 
-router.get('/appointments/:userId', async (req, res) => {
+const verifyToken = (req, res, next) => {
+  const token = req.header('Authorization');
+  
+  if (!token) {
+      return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
+
+  try {
+      const verified = jwt.verify(token.replace('Bearer ', ''), JWT_SECRET);
+      req.user = verified;
+      next();
+  } catch (error) {
+      res.status(400).json({ message: 'Invalid token.' });
+  }
+};
+
+
+router.get('/appointments/:userId',verifyToken, async (req, res) => {
   try {
     const { userId } = req.params; 
     const appointments = await appointmentSchema.find({ userID: userId });
@@ -42,9 +59,10 @@ router.post('/appointments/create', async (req, res) => {
 });
 
 
-router.get('/appointments/all', async (req, res) => {
+router.get('/appointments/all',verifyToken ,async (req, res) => {
   try {
-    const appointments = await appointmentSchema.find().populate();
+    const appointments = await appointmentSchema.find()
+    .populate();
 
     if (appointments.length === 0) {
       return res.status(404).json({ message: 'No appointments found' });
