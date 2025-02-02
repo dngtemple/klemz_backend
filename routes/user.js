@@ -169,3 +169,4 @@ router.post('/forgot-password', async (req, res) => {
   
 
 module.exports = router;
+module.exports.verifyToken = verifyToken;
