@@ -37,9 +37,9 @@ router.get('/appointments/:userId',verifyToken, async (req, res) => {
 
 router.post('/appointments/create', async (req, res) => {
   try {
-    const { userID, barberID } = req.body; 
+    const { userID, barberID , haircutID ,time } = req.body; 
 
-    if (!userID || !barberID ) {
+    if (!userID || !barberID || !haircutID || !time) {
       return res.status(400).json({ message: 'userID, barberID, and datetime are required' });
     }
 
@@ -47,6 +47,8 @@ router.post('/appointments/create', async (req, res) => {
     const newAppointment = new appointmentSchema({
       userID,
       barberID,
+      haircutID,
+      time,
       status: false, 
     });
 
