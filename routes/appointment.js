@@ -70,4 +70,21 @@ router.get('/appointments/all' ,async (req, res) => {
 });
 
 
+router.delete('/appointments/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedAppointment = await appointmentSchema.findByIdAndDelete(id);
+
+    if (!deletedAppointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    res.status(200).json({ message: 'Appointment deleted successfully', deletedAppointment });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error, unable to delete appointment' });
+  }
+});
+
+
+
 module.exports = router;
