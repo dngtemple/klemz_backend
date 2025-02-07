@@ -103,8 +103,6 @@ router.get("/todayonly", async (req, res) => {
   }
 });
 
-module.exports = router;
-
 
 
 
