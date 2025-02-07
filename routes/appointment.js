@@ -51,7 +51,7 @@ router.post('/appointments/create', async (req, res) => {
   }
 });
 
-router.get('/appointments/all', async (req, res) => {
+router.get('/appointments/get/all', async (req, res) => {
   try {
     console.log("Fetching all appointments...");
     const appointments = await appointmentSchema.find()
