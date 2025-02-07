@@ -51,23 +51,61 @@ router.post('/appointments/create', async (req, res) => {
   }
 });
 
-
-router.get('/appointments/all' ,async (req, res) => {
+router.get('/appointments/all', async (req, res) => {
   try {
+    console.log("Fetching all appointments...");
     const appointments = await appointmentSchema.find()
-    .populate('haircutID')
-    .populate('userID')
-    .populate('barberID')
+      .populate('haircutID')
+      .populate('userID')
+      .populate('barberID');
 
     if (appointments.length === 0) {
       return res.status(404).json({ message: 'No appointments found' });
     }
 
-    res.status(200).json(appointments); 
+    res.status(200).json(appointments);
   } catch (error) {
-    res.status(500).json({ message: 'Server error, unable to fetch appointments' });
+    console.error("Error fetching appointments:", error); // Log full error
+    res.status(500).json({ message: 'Server error, unable to fetch appointments', error: error.message });
   }
 });
+
+
+
+
+router.get("/todayonly", async (req, res) => {
+  try {
+    console.log("Fetching today's appointments...");
+
+    const today = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+
+    const appointments = await appointmentSchema.find({
+      createdAt: {
+        $gte: new Date(today), // Start of the day
+        $lt: new Date(new Date(today).setDate(new Date(today).getDate() + 1)), // Start of next day
+      },
+    })
+      .populate("haircutID")
+      .populate("userID")
+      .populate("barberID");
+
+    if (appointments.length === 0) {
+      return res.status(404).json({ message: "No appointments found for today" });
+    }
+
+    res.status(200).json(appointments);
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+    res.status(500).json({
+      message: "Server error, unable to fetch appointments",
+      error: error.message,
+    });
+  }
+});
+
+module.exports = router;
+
+
 
 
 router.delete('/appointments/:id', async (req, res) => {
