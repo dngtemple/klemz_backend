@@ -21,9 +21,13 @@ const appointmentSchema = new mongoose.Schema({
     type: Boolean,
     default: false, 
   },
-  time:{
-    type : String,
-    required:true
+  date: {
+    type: String, // You can change this to Date type if storing actual Date objects
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true
   }
 }, {
   timestamps: true, 
