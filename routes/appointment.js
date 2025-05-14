@@ -28,9 +28,9 @@ router.get('/appointments/:userId', verifyToken, async (req, res) => {
 
 router.post('/appointments/create', async (req, res) => {
   try {
-    const { userID, barberID , haircutID ,time } = req.body; 
+    const { userID, barberID , haircutID ,time,date } = req.body; 
 
-    if (!userID || !barberID || !haircutID || !time) {
+    if (!userID || !barberID || !haircutID || !time || !date) {
       return res.status(400).json({ message: 'userID, barberID, and datetime are required' });
     }
 
