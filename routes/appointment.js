@@ -40,6 +40,7 @@ router.post('/appointments/create', async (req, res) => {
       barberID,
       haircutID,
       time,
+      date,
       status: false, 
     });
 
