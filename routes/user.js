@@ -3,6 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'your_secret_key';
+require('dotenv').config();
+const appPassword = process.env.NODEMAILER
+const nodemailer = require('nodemailer');
 
 
 const UserSchema = require('../model/usermodel'); 
@@ -84,36 +87,62 @@ router.get('/users/:id', verifyToken, async (req, res) => {
   });
 
 
-  router.post("/register",function(req,res){
-    let data=req.body;
-  
-    bcrypt.genSalt(10,function(err,Salt){
-        if(err===null){
-            bcrypt.hash(data.password,Salt,function(err,newpassword){
-                if(err===null){
-                    data.password=newpassword;
-                    UserSchema.create(data)
-                    .then(function(){
-                        res.send({success:true,message:"Registration Successful"});
-                    })
-                    .catch(function(err){
-                        console.log(err);
-                        res.send({success:false,message:"Registration problems"});
-                    })
-                }
-                else{
-                    console.log(err);
-                    res.send({success:false,message:"Registration problems"});
-                }
-            })
-        }
-        else{
-            console.log(err);
-            res.send({success:false,message:"Registration problems"});
-        }
-    })
 
-})
+router.post("/register", function(req, res) {
+  let data = req.body;
+
+  bcrypt.genSalt(10, function(err, Salt) {
+    if (err) {
+      console.log(err);
+      return res.send({ success: false, message: "Registration problems" });
+    }
+
+    bcrypt.hash(data.password, Salt, function(err, newpassword) {
+      if (err) {
+        console.log(err);
+        return res.send({ success: false, message: "Registration problems" });
+      }
+
+      data.password = newpassword;
+
+      UserSchema.create(data)
+        .then(function(user) {
+          // ✅ Email sending logic after successful registration
+
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: "maryturneru42@gmail.com",
+              pass: appPassword
+            },
+          });
+
+          const mailOptions = {
+            from: "maryturneru42@gmail.com",
+            to: user.email,
+            subject: 'Welcome to Our Platform!',
+            text: `Hi ${user.name || 'there'},\n\nYour registration was successful. Welcome aboard!`,
+          };
+
+          transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+              console.log('Email error:', error);
+              // Still send success since registration worked
+              return res.send({ success: true, message: "Registered, but email failed to send" });
+            } else {
+              console.log('Email sent: ' + info.response);
+              return res.send({ success: true, message: "Registration Successful. Email sent." });
+            }
+          });
+        })
+        .catch(function(err) {
+          console.log(err);
+          res.send({ success: false, message: "Registration problems" });
+        });
+    });
+  });
+});
+
 
 
 router.put('/users/:id', async (req, res) => {
