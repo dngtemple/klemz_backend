@@ -76,11 +76,53 @@ router.post('/appointments/create', async (req, res) => {
 
     // Compose the email
     const mailOptions = {
-      from: 'maryturneru42@gmail.com',
-      to: user.email,
-      subject: 'Appointment Confirmation',
-      text: `Hello ${user.name}, your appointment is booked for ${date} at ${time} with ${barber.fullName}.`,
-    };
+  from: 'maryturneru42@gmail.com',
+  to: user.email,
+  subject: 'Appointment Confirmation',
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; border: 1px solid #eee; padding: 20px;">
+      <div style="text-align: center;">
+        <img src="https://yourbarbershop.com/logo.png" alt="Klems Barbershop" style="width: 100px; margin-bottom: 10px;" />
+        <h2 style="color: #333;">Klems Barbershop</h2>
+        <p style="color: #666; font-size: 18px;">Your Appointment is Confirmed</p>
+      </div>
+
+      <div style="margin-top: 30px;">
+        <p style="font-size: 16px; color: #444;">Hello <strong>${user.fullName}</strong>,</p>
+        <p style="font-size: 16px; color: #444;">
+          Thank you for booking with Klems Barbershop! Your appointment is scheduled for:
+        </p>
+        <ul style="font-size: 16px; color: #444; list-style: none; padding-left: 0;">
+          <li><strong>Date:</strong> ${date}</li>
+          <li><strong>Time:</strong> ${time}</li>
+          <li><strong>Barber:</strong> ${barber.fullName}</li>
+        </ul>
+        <p style="font-size: 16px; color: #444;">
+          Please arrive a few minutes early to ensure a smooth check-in. If you need to modify or cancel your appointment, you can use the link below.
+        </p>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://yourbarbershop.com/manage" style="background-color: #111; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 5px;">Manage Appointment</a>
+        </div>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #ddd; margin: 40px 0;"/>
+
+      <div style="text-align: center;">
+        <p style="font-size: 14px; color: #888;">Stay connected with us</p>
+        <a href="https://facebook.com/yourbarbershop" style="margin: 0 8px;"><img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook"></a>
+        <a href="https://instagram.com/yourbarbershop" style="margin: 0 8px;"><img src="https://cdn-icons-png.flaticon.com/24/733/733558.png" alt="Instagram"></a>
+        <a href="https://twitter.com/yourbarbershop" style="margin: 0 8px;"><img src="https://cdn-icons-png.flaticon.com/24/733/733579.png" alt="Twitter"></a>
+
+        <p style="margin-top: 20px; font-size: 13px; color: #aaa;">
+          © ${new Date().getFullYear()} Klems Barbershop. All rights reserved.
+        </p>
+        <a href="https://yourbarbershop.com" style="font-size: 14px; color: #007bff; text-decoration: none;">Visit Website</a>
+      </div>
+    </div>
+  `,
+};
+
 
     // Send the email
     await transporter.sendMail(mailOptions);

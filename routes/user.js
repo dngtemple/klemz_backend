@@ -117,12 +117,46 @@ router.post("/register", function(req, res) {
             },
           });
 
-          const mailOptions = {
-            from: "maryturneru42@gmail.com",
-            to: user.email,
-            subject: 'Welcome to Our Platform!',
-            text: `Hi ${user.name || 'there'},\n\nYour registration was successful. Welcome aboard!`,
-          };
+         const mailOptions = {
+  from: "maryturneru42@gmail.com",
+  to: user.email,
+  subject: "Welcome to Our Platform!",
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; border: 1px solid #e0e0e0; padding: 30px;">
+      <div style="text-align: center;">
+        <img src="https://yourplatform.com/logo.png" alt="Platform Logo" style="width: 100px; margin-bottom: 15px;" />
+        <h1 style="color: #333;">Welcome to Our Platform</h1>
+      </div>
+
+      <p style="font-size: 16px; color: #444;">Hi <strong>${user.fullName || 'there'}</strong>,</p>
+
+      <p style="font-size: 16px; color: #444;">
+        We're excited to have you on board! Your registration was successful and your journey with us begins now.
+      </p>
+
+
+      <p style="font-size: 14px; color: #666;">
+        If you have any questions or need assistance, feel free to reach out to our support team at 
+        <a href="mailto:support@yourplatform.com" style="color: #007BFF;">support@yourplatform.com</a>.
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;"/>
+
+      <div style="text-align: center;">
+        <p style="font-size: 14px; color: #888;">Stay connected with us</p>
+        <a href="https://facebook.com/yourplatform" style="margin: 0 8px;"><img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook"></a>
+        <a href="https://instagram.com/yourplatform" style="margin: 0 8px;"><img src="https://cdn-icons-png.flaticon.com/24/733/733558.png" alt="Instagram"></a>
+        <a href="https://twitter.com/yourplatform" style="margin: 0 8px;"><img src="https://cdn-icons-png.flaticon.com/24/733/733579.png" alt="Twitter"></a>
+
+        <p style="margin-top: 20px; font-size: 13px; color: #aaa;">
+          © ${new Date().getFullYear()} Your Platform. All rights reserved.
+        </p>
+        <a href="https://yourplatform.com" style="font-size: 14px; color: #007bff; text-decoration: none;">Visit Website</a>
+      </div>
+    </div>
+  `,
+};
+
 
           transporter.sendMail(mailOptions, function(error, info) {
             if (error) {
@@ -131,7 +165,7 @@ router.post("/register", function(req, res) {
               return res.send({ success: true, message: "Registered, but email failed to send" });
             } else {
               console.log('Email sent: ' + info.response);
-              return res.send({ success: true, message: "Registration Successful. Email sent." });
+              return res.send({ success: true, message: "Registration Successful." });
             }
           });
         })
