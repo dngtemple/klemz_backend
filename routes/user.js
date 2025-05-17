@@ -124,7 +124,7 @@ router.post("/register", function(req, res) {
   html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; border: 1px solid #e0e0e0; padding: 30px;">
       <div style="text-align: center;">
-        <img src="https://yourplatform.com/logo.png" alt="Platform Logo" style="width: 100px; margin-bottom: 15px;" />
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzp6RjIaBjXwuGjvULvi03Hb7V6HLfcwZkGQ&s" alt="Platform Logo" style="width: 100px; margin-bottom: 15px;" />
         <h1 style="color: #333;">Welcome to Our Platform</h1>
       </div>
 
@@ -137,7 +137,7 @@ router.post("/register", function(req, res) {
 
       <p style="font-size: 14px; color: #666;">
         If you have any questions or need assistance, feel free to reach out to our support team at 
-        <a href="mailto:support@yourplatform.com" style="color: #007BFF;">support@yourplatform.com</a>.
+        <a href="mailto:support@klems.com" style="color: #007BFF;">support@yourplatform.com</a>.
       </p>
 
       <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;"/>

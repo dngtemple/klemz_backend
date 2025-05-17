@@ -82,7 +82,6 @@ router.post('/appointments/create', async (req, res) => {
   html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; border: 1px solid #eee; padding: 20px;">
       <div style="text-align: center;">
-        <img src="https://yourbarbershop.com/logo.png" alt="Klems Barbershop" style="width: 100px; margin-bottom: 10px;" />
         <h2 style="color: #333;">Klems Barbershop</h2>
         <p style="color: #666; font-size: 18px;">Your Appointment is Confirmed</p>
       </div>
